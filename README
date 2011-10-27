@@ -1,0 +1,27 @@
+This is Perl module Module::Setup::Flavor::ArkDBIC.
+
+INSTALLATION
+
+Module::Setup::Flavor::ArkDBIC installation is straightforward. If your CPAN shell is set up,
+you should just be able to do
+
+    % cpan Module::Setup::Flavor::ArkDBIC
+
+Download it, unpack it, then build it as per the usual:
+
+    % perl Makefile.PL
+    % make && make test
+
+Then install it:
+
+    % make install
+
+DOCUMENTATION
+
+Module::Setup::Flavor::ArkDBIC documentation is available as in POD. So you can do:
+
+    % perldoc Module::Setup::Flavor::ArkDBIC
+
+to read the documentation online with your favorite pager.
+
+Masayuki Matsuki
