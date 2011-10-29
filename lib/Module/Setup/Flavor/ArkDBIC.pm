@@ -104,7 +104,8 @@ file: config_local.pl
 template: |
   +{}
 ---
-file: script/dev/upgrade_database.l
+file: script/dev/upgrade_database.pl
+template: |
   #!/usr/bin/env perl
 
   use strict;
@@ -355,7 +356,7 @@ template: |
 
   =cut
 ---
-file: ____var-module-path-var____/Models.pm
+file: lib/____var-module_path-var____/Models.pm
 template: |
   package [% module %]::Models;
   use strict;
@@ -381,15 +382,17 @@ template: |
           shift->get('Schema')->resultset($module);
       };
   }
+
+  1;
 ---
-file: ____var-module-path-var____/View/MT.pm
+file: lib/____var-module_path-var____/View/MT.pm
 template: |
   package [% module %]::View::MT;
   use Ark 'View::MT';
 
   __PACKAGE__->meta->make_immutable;
 ---
-file: ____var-module-path-var____/Schema.pm
+file: lib/____var-module_path-var____/Schema.pm
 template: |
   package [% module %]::Schema;
   use strict;
@@ -413,7 +416,7 @@ template: |
 
   1;
 ---
-file: ____var-module-path-var____/Schema/ResultBase.pm
+file: lib/____var-module_path-var____/Schema/ResultBase.pm
 template: |
   package [% module %]::Schema::ResultBase;
   use strict;
@@ -443,7 +446,8 @@ template: |
   }
   1;
 ---
-file: lib/____var-module-path-var____/Controller.pm
+file: lib/____var-module_path-var____/Controller.pm
+template: |
   package [% module %]::Controller;
   use Ark 'Controller';
   use [% module %]::Models;
