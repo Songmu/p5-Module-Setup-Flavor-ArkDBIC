@@ -41,6 +41,7 @@ template: |
   requires 'SQL::Translator';
   requires 'DBD::mysql';
   requires 'DateTime::Format::MySQL';
+  requires 'Module::Find';
 
   requires 'IO::Prompt';
 
