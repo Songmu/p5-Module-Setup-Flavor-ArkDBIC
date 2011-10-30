@@ -2,7 +2,7 @@ package Module::Setup::Flavor::ArkDBIC;
 use strict;
 use warnings;
 
-use base 'Module::Setup::Flavor';
+use base 'Module::Setup::Flavor::SelectVC';
 
 sub loader {
     my $self = shift;
@@ -38,7 +38,6 @@ template: |
   requires 'DateTime';
   requires 'FindBin::libs';
   requires 'DBIx::Class';
-  requires 'DBIx::Class::Cursor::Cached';
   requires 'SQL::Translator';
   requires 'DBD::mysql';
   requires 'DateTime::Format::MySQL';
@@ -397,7 +396,7 @@ template: |
   package [% module %]::Schema;
   use strict;
   use warnings;
-  use base 'DBIx::Class::Schema';
+  use parent 'DBIx::Class::Schema';
   use DateTime;
 
   our $VERSION = '0';
@@ -421,7 +420,10 @@ template: |
   package [% module %]::Schema::ResultBase;
   use strict;
   use warnings;
-  use base 'DBIx::Class';
+  use utf8;
+
+  use DateTime;
+  use parent 'DBIx::Class';
 
   __PACKAGE__->load_components(qw/InflateColumn::DateTime Core/);
 
@@ -573,7 +575,7 @@ template: |
   use strict;
   use warnings;
   use utf8;
-  use base qw/[% module %]::Schema::ResultBase/;
+  use parent qw/[% module %]::Schema::ResultBase/;
 
   use [% module %]::Models;
 
