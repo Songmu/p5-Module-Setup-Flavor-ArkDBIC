@@ -478,7 +478,7 @@ template: |
 
   1;
 ---
-file: script/dev/ark.pl
+file: script/dev/skeleton.pl
 template: |
   #!/usr/bin/env perl
   use strict;
@@ -495,11 +495,11 @@ template: |
 
   =head1 SYNOPSIS
 
-      script/dev/ark.pl controller Controller::Name
-      script/dev/ark.pl schema TableName
-      script/dev/ark.pl view ViewName
-      script/dev/ark.pl module Module::Name
-      script/dev/ark.pl script batch/name
+      script/dev/skeleton.pl controller Controller::Name
+      script/dev/skeleton.pl schema TableName
+      script/dev/skeleton.pl view ViewName
+      script/dev/skeleton.pl module Module::Name
+      script/dev/skeleton.pl script batch/name
 
       Options:
          -help    brief help message
