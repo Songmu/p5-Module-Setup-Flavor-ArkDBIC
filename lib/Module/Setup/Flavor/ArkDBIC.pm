@@ -119,10 +119,10 @@ template: |
 
   my ($help, $dry_run, $test_db, $drop_table);
   GetOptions(
-      'h|help'  => \$help,
-      'dry-run' => \$dry_run,
-      'test-db' => \$test_db,
-      'drop-table' => \$drop_table,
+      'h|help'      => \$help,
+      'd|dry-run'   => \$dry_run,
+      'test-db'     => \$test_db,
+      'drop-table'  => \$drop_table,
   ) or usage();
   exit usage() if $help;
 
@@ -489,7 +489,7 @@ template: |
   use [% module %]::Models;
 
   use Text::MicroTemplate::DataSectionEx;
-  use String::CamelCase qw/decamelize/;
+  use String::CamelCase qw/camelize decamelize/;
   use Getopt::Long;
   use Pod::Usage;
 
@@ -497,6 +497,8 @@ template: |
 
       script/dev/ark.pl controller Controller::Name
       script/dev/ark.pl schema TableName
+      script/dev/ark.pl view ViewName
+      script/dev/ark.pl module Module::Name
       script/dev/ark.pl script batch/name
 
       Options:
@@ -511,12 +513,20 @@ template: |
   my ($type, $name) = @ARGV;
   pod2usage(1) if !$name;
 
+  $type = lc $type;
+
   my $config = +{
       controller  => {
           dirs  => [qw/lib [% module %] Controller/],
       },
       schema      => {
           dirs => [qw/lib [% module %] Schema Result/],
+      },
+      view        => {
+          dirs => [qw/lib [% module %] View/],
+      },
+      module      => {
+          dirs => [qw/lib/],
       },
       script  => {
           dirs  => [qw/script/],
@@ -529,7 +539,7 @@ template: |
   my @dirs = @{$config->{dirs}};
   my $ext = $config->{ext} || 'pm';
 
-
+  $name = camelize $name if $type ~~ [qw/controller schema/];
   my $decamelized = decamelize($name);
   $decamelized =~ s!::!/!g;
 
@@ -601,6 +611,21 @@ template: |
 
   1;
 
+  @@ view.mt
+  package [% module %]::View::<?= $name ?>;
+  use Ark 'View::<?= $name ?>';
+
+  __PACKAGE__->meta->make_immutable;
+
+  @@ module.mt
+  package <?= $name ?>;
+
+  use strict;
+  use warnings;
+  use utf8;
+
+  1;
+
   @@ script.mt
   #!/usr/bin/env perl
   use strict;
@@ -632,3 +657,4 @@ template: |
   pod2usage(1) if $help;
 
   1;
+
