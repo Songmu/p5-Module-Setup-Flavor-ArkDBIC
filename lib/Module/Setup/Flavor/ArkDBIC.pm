@@ -308,12 +308,6 @@ template: |
 
   config 'View::MT' => {
       use_cache => 1,
-
-      macro => {
-          stash => sub {
-              __PACKAGE__->context->stash;
-          },
-      },
   };
 
   config 'Plugin::Session::Store::Model' => {
@@ -328,7 +322,8 @@ template: |
       expires => '+30d',
   };
 
-  1;
+  __PACKAGE__->meta->make_immutable;
+
   __END__
 
   =head1 NAME
@@ -389,6 +384,14 @@ file: lib/____var-module_path-var____/View/MT.pm
 template: |
   package [% module %]::View::MT;
   use Ark 'View::MT';
+
+  use Text::MicroTemplate ();
+
+  has '+macro' => default => sub {
+      return {
+          encoded_string => sub { Text::MicroTemplate::encoded_string(@_) },
+      };
+  };
 
   __PACKAGE__->meta->make_immutable;
 ---
@@ -470,13 +473,13 @@ template: |
 
   sub end :Private {
       my ($self, $c) = @_;
-      unless ($c->res->body or $c->res->status =~ /^3\d\d/) {
+      unless ($c->res->body or $c->res->status =~ /^3/) {
           $c->forward($c->view);
       }
 
   }
 
-  1;
+  __PACKAGE__->meta->make_immutable;
 ---
 file: script/dev/skeleton.pl
 template: |
@@ -578,7 +581,7 @@ template: |
       my ($self, $c) = @_;
   }
 
-  1;
+  __PACKAGE__->meta->make_immutable;
 
   @@ schema.mt
   package [% module %]::Schema::Result::<?= $name ?>;
@@ -595,6 +598,7 @@ template: |
       id => {
           data_type   => 'INTEGER',
           is_nullable => 0,
+          is_auto_incremant => 1,
           extra => {
               unsigned => 1,
           },
