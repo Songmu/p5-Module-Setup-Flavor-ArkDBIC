@@ -440,7 +440,6 @@ template: |
   use warnings;
   use utf8;
 
-  use DateTime;
   use parent 'DBIx::Class';
 
   __PACKAGE__->load_components(qw/InflateColumn::DateTime Core/);
