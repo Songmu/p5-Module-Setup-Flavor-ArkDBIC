@@ -306,16 +306,8 @@ template: |
   use_model '[% module %]::Models';
   our $VERSION = '0.01';
 
-  config 'View::MT' => {
-      use_cache => 1,
-  };
-
   config 'Plugin::Session::Store::Model' => {
       model => 'session',
-  };
-
-  config 'Plugin::PageCache' => {
-      model => 'cache',
   };
 
   config 'Plugin::Session' => {
@@ -378,6 +370,15 @@ template: |
       };
   }
 
+  register session => sub {
+      my $self = shift;
+
+      my $conf = $self->get('conf')->{session}
+          or die "Require session config";
+
+      $self->adaptor($conf);
+  };
+
   1;
 ---
 file: lib/____var-module_path-var____/View/MT.pm
@@ -387,11 +388,7 @@ template: |
 
   use Text::MicroTemplate ();
 
-  has '+macro' => default => sub {
-      return {
-          encoded_string => sub { Text::MicroTemplate::encoded_string(@_) },
-      };
-  };
+  has '+use_cache' => default => sub {1};
 
   __PACKAGE__->meta->make_immutable;
 ---
@@ -410,12 +407,9 @@ template: |
   __PACKAGE__->load_components('Schema::Versioned');
   __PACKAGE__->upgrade_directory('sql/');
 
-  my $TZ = DateTime::TimeZone->new(name => 'Asia/Tokyo');
-  sub TZ {$TZ}
-
-  sub now {
-      return DateTime->now(time_zone => $TZ);
-  }
+  sub TZ    {DateTime::TimeZone->new(name => 'Asia/Tokyo')}
+  sub now   {DateTime->now(time_zone => shift->TZ)}
+  sub today {shift->now->truncate(to => 'day')}
 
   1;
 ---
