@@ -81,7 +81,6 @@ template: |
   use Plack::Builder;
   use Plack::Middleware::Static;
   use lib 'lib';
-
   use [% module %];
 
   my $app = [% module %]->new;
@@ -105,6 +104,7 @@ template: |
   +{}
 ---
 file: script/dev/upgrade_database.pl
+chmod: 0700
 template: |
   #!/usr/bin/env perl
 
@@ -227,6 +227,7 @@ template: |
   }
 ---
 file: script/dev/create_ddl.pl
+chmod: 0700
 template: |
   #!/usr/bin/env perl
 
@@ -254,11 +255,13 @@ template: |
 
   =cut
 
+  my $dir = 'sql/';
   my ($preversion, $help, $replace_version);
   GetOptions(
       'h|help'          => \$help,
       'p|preversion=i'  => \$preversion,
       'replace-version' => \$replace_version,
+      'dir=s'           => \$dir,
   ) or die pod2usage;
   pod2usage(1) if $help;
 
@@ -276,7 +279,7 @@ template: |
   $schema->create_ddl_dir(
       [qw/MySQL/],
       $next_version,
-      "$FindBin::Bin/../../sql/",
+      "$FindBin::Bin/../../$dir",
       $preversion,
       +{
           parser      => 'SQL::Translator::Parser::DBIx::Class',
@@ -476,6 +479,7 @@ template: |
   __PACKAGE__->meta->make_immutable;
 ---
 file: script/dev/skeleton.pl
+chmod: 0700
 template: |
   #!/usr/bin/env perl
   use strict;
