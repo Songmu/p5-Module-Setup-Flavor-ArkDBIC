@@ -72,6 +72,7 @@ template: |
   *.sw[po]
   config_local.pl
   tmp/
+---
 file: prod.psgi
 template: |
   use lib 'lib';
