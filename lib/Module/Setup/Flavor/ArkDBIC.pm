@@ -425,6 +425,7 @@ template: |
 
   use DateTime;
   use parent 'DBIx::Class';
+  use [% module %]::Schema::Types;
 
   __PACKAGE__->load_components(qw/InflateColumn::DateTime Core/);
 
@@ -447,6 +448,102 @@ template: |
 
       $self->next::method(@_);
   }
+  1;
+---
+file: lib/____var-module_path-var____/Schema/Types.pm
+template: |
+  package [% module %]::Schema::Types;
+  use strict;
+  use warnings;
+  use utf8;
+
+  use parent 'Exporter';
+
+  our @EXPORT = qw/PK_INTEGER INTEGER PK_BIGINT BIGINT TINYINT VARCHAR TEXT DATETIME/;
+
+  sub PK_INTEGER {
+      +{
+          data_type   => 'INTEGER',
+          is_nullable => 0,
+          is_auto_increment => 1,
+          extra => {
+              unsigned => 1,
+          },
+          @_,
+      };
+  }
+
+  sub INTEGER {
+      +{
+          data_type     => 'INTEGER',
+          is_nullable   => 0,
+          extra => {
+              unsigned => 1,
+          },
+          @_,
+      };
+  }
+
+  sub PK_BIGINT {
+      +{
+          data_type   => 'BIGINT',
+          is_nullable => 0,
+          is_auto_increment => 1,
+          extra => {
+              unsigned => 1,
+          },
+          @_,
+      };
+  }
+
+  sub BIGINT {
+      +{
+          data_type     => 'BIGINT',
+          is_nullable   => 0,
+          extra => {
+              unsigned => 1,
+          },
+          @_,
+      };
+  }
+
+  sub TINYINT {
+      +{
+          data_type     => 'TINYINT',
+          is_nullable   => 0,
+          extra => {
+              unsigned => 1,
+          },
+          @_,
+      };
+  }
+
+  sub VARCHAR {
+      +{
+          data_type     => 'VARCHAR',
+          size          => 255,
+          is_nullable   => 0,
+          @_,
+      };
+  }
+
+  sub TEXT {
+      +{
+          data_type   => 'TEXT',
+          is_nullable => 0,
+          @_,
+      };
+  }
+
+  sub DATETIME {
+      +{
+          data_type     => 'DATETIME',
+          is_nullable   => 0,
+          time_zone     => [% module %]::Schema->TZ,
+          @_,
+      },
+  }
+
   1;
 ---
 file: lib/____var-module_path-var____/Controller.pm
