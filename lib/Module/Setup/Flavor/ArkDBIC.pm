@@ -56,6 +56,22 @@ template: |
 
   WriteAll;
 ---
+file: .gitignore
+template: |
+  cover_db
+  META.yml
+  MYMETA*
+  Makefile
+  blib
+  inc
+  pm_to_blib
+  MANIFEST
+  Makefile.old
+  nytprof.out
+  MANIFEST.bak
+  *.sw[po]
+  config_local.pl
+  tmp/
 file: prod.psgi
 template: |
   use lib 'lib';
@@ -756,4 +772,11 @@ template: |
   pod2usage(1) if $help;
 
   1;
-
+---
+dir: lib/____var-module_path-var____/Controller
+---
+dir: lib/____var-module_path-var____/Schema/Result
+----
+dir: lib/____var-module_path-var____/Schema/ResultSet
+---
+dir: tmp/
