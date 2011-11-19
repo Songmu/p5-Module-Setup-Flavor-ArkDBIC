@@ -442,7 +442,6 @@ template: |
 
   use DateTime;
   use parent 'DBIx::Class';
-  use [% module %]::Schema::Types;
 
   __PACKAGE__->load_components(qw/InflateColumn::DateTime Core/);
 
@@ -703,18 +702,12 @@ template: |
   use utf8;
   use parent qw/[% module %]::Schema::ResultBase/;
 
+  use [% module %]::Schema::Types;
   use [% module %]::Models;
 
   __PACKAGE__->table('<?= $decamelized ?>');
   __PACKAGE__->add_columns(
-      id => {
-          data_type   => 'INTEGER',
-          is_nullable => 0,
-          is_auto_incremant => 1,
-          extra => {
-              unsigned => 1,
-          },
-      },
+      id => PK_INTEGER,
   );
 
   sub sqlt_deploy_hook {
@@ -781,4 +774,5 @@ dir: lib/____var-module_path-var____/Schema/Result
 dir: lib/____var-module_path-var____/Schema/ResultSet
 ---
 dir: tmp/
-
+---
+dir: root/
