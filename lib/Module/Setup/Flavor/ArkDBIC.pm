@@ -88,7 +88,6 @@ template: |
   my $models = [% module %]::Models->instance;
   $models->load_all;
 
-  my $app = [% module %]->new;
   builder {
       $app->handler;
   };
