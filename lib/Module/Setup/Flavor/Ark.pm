@@ -24,32 +24,16 @@ Module::Setup::Flavor::ArkDBIC - Ark flavor
 __DATA__
 
 ---
-file: Makefile.PL
+file: cpanfile
 template: |
-  use inc::Module::Install;
-
-  name '[% module %]';
-  all_from 'lib/[% module %].pm';
-
-  requires 'Path::AttrRouter';
   requires 'Ark';
-
-  requires 'Text::MicroTemplate::Extended';
   requires 'DateTime';
-  requires 'FindBin::libs';
   requires 'DBIx::Class';
+  requires 'FindBin::libs';
   requires 'SQL::Translator';
-
-  requires 'Text::MicroTemplate::DataSection';
   requires 'String::CamelCase';
-
-  tests 't/*.t';
-  author_tests 'xt';
-
-  auto_set_repository;
-  auto_include;
-
-  WriteAll;
+  requires 'Text::MicroTemplate::Extended';
+  requires 'Text::MicroTemplate::DataSection';
 ---
 file: prod.psgi
 template: |
@@ -227,7 +211,7 @@ template: |
   my @dirs = @{$config->{dirs}};
   my $ext = $config->{ext} || 'pm';
 
-  $name = camelize $name if $type ~~ [qw/controller schema/];
+  $name = camelize $name if (grep {$type eq $_} @{[qw/controller schema/]});
   my $decamelized = decamelize($name);
   $decamelized =~ s!::!/!g;
 
